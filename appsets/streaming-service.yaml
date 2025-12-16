@@ -9,8 +9,6 @@ spec:
   generators:
     - list:
         elements:
-          - env: dev
-            namespace: team-streaming-dev
           - env: tst
             namespace: team-streaming-tst
           - env: acc
@@ -25,9 +23,9 @@ spec:
         app: streaming-service
         env: "{{ .env }}"
     spec:
-      project: team-streaming
+      project: default
       sources:
-        - repoURL: oci://europe-west4-docker.pkg.dev/sandbox-9456/helm
+        - repoURL: europe-west4-docker.pkg.dev/sandbox-9456/helm
           chart: service-chart
           targetRevision: 0.0.0-dev.43c569a
           helm:
@@ -44,6 +42,3 @@ spec:
         automated:
           prune: true
           selfHeal: true
-        syncOptions:
-          - CreateNamespace=false
-          - ApplyOutOfSyncOnly=true
