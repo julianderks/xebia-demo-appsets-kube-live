@@ -24,17 +24,10 @@ spec:
         primetime.io/environment: "{{ .path.basename }}"
     spec:
       project: default
-      sources:
-        - repoURL: europe-west4-docker.pkg.dev/sandbox-9456/helm
-          chart: service-chart
-          targetRevision: 0.0.0-dev.43c569a
-          helm:
-            valueFiles:
-              - $values/base/values.yaml
-              - $values/envs/{{ .path.basename }}/values.yaml
-        - repoURL: https://github.com/JulianDerksOrg/xebia-demo-catalog-kube-live.git
-          targetRevision: main
-          ref: values
+      source:
+        repoURL: https://github.com/JulianDerksOrg/xebia-demo-catalog-kube-live.git
+        targetRevision: main
+        path: envs/{{ .path.basename }}
       destination:
         server: https://kubernetes.default.svc
         namespace: "content-{{ .path.basename }}"
