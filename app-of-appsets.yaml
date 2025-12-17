@@ -12,6 +12,8 @@ spec:
     repoURL: https://github.com/JulianDerksOrg/xebia-demo-appsets-kube-live.git
     targetRevision: main
     path: appsets
+    directory:
+      recurse: true
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
