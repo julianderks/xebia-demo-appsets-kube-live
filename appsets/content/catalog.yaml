@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: content-catalog
+  namespace: argocd
+  labels:
+    primetime.io/app: catalog
+    primetime.io/team: content
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: https://github.com/JulianDerksOrg/xebia-demo-catalog-kube-live.git
+        revision: main
+        files:
+          - path: envs/*/Chart.yaml
+  template:
+    metadata:
+      name: "content-catalog-{{ .path.basename }}"
+      labels:
+        primetime.io/app: catalog
+        primetime.io/team: content
+        primetime.io/environment: "{{ .path.basename }}"
+    spec:
+      project: default
+      sources:
+        - repoURL: europe-west4-docker.pkg.dev/sandbox-9456/helm
+          chart: service-chart
+          targetRevision: 0.0.0-dev.43c569a
+          helm:
+            valueFiles:
+              - $values/base/values.yaml
+              - $values/envs/{{ .path.basename }}/values.yaml
+        - repoURL: https://github.com/JulianDerksOrg/xebia-demo-catalog-kube-live.git
+          targetRevision: main
+          ref: values
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "content-{{ .path.basename }}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
