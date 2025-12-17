@@ -28,6 +28,11 @@ spec:
         repoURL: https://github.com/JulianDerksOrg/xebia-demo-catalog-kube-live.git
         targetRevision: main
         path: envs/{{ .path.basename }}
+        helm:
+          valueFiles:
+            - ../../base/values.yaml
+            - values.yaml
+
       destination:
         server: https://kubernetes.default.svc
         namespace: "content-{{ .path.basename }}"
